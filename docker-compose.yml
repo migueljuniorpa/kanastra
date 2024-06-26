@@ -1,0 +1,78 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: freaks
+        uid: 1000
+      context: ./
+      dockerfile: docker/Dockerfile
+    image: kanastra-image
+    container_name: kanastra-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www:delegated
+      - ./docker/docker-compose/php/php.ini:/usr/local/etc/php/php.ini:delegated
+      - ./docker/docker-compose/php/imagick-policy.xml:/etc/ImageMagick-6/policy.xml:delegated
+    networks:
+      - kanastra
+    command: /bin/bash -c "composer install && php-fpm"
+
+  db:
+    image: mysql
+    container_name: kanastra-db
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      TZ: America/Sao_Paulo
+    volumes:
+      - ./docker/docker-compose/mysql:/docker-entrypoint-initdb.d:delegated
+      - ./docker/docker-compose/mysql:/var/lib/mysql
+    networks:
+      - kanastra
+    command: --sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+
+  nginx:
+    image: nginx:alpine
+    container_name: kanastra-nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+#      - 443:443
+    volumes:
+      - ./:/var/www:delegated
+      - ./docker/docker-compose/nginx:/etc/nginx/conf.d/
+#      - ./docker/docker-compose/certbot/conf:/etc/letsencrypt
+#      - ./docker/docker-compose/certbot/www:/var/www/certbot
+    networks:
+      - kanastra
+
+  redis:
+    image: redis:alpine
+    container_name: kanastra-redis
+    command: ["redis-server", "--appendonly", "no", "--maxmemory", "1gb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "6379:6379"
+    networks:
+      - kanastra
+
+#  certbot:
+#      image: certbot/certbot:latest
+#      command: certonly --webroot --webroot-path=/var/www/certbot --email miguel@colmeiadigital.com.br --agree-tos --no-eff-email -d api.kanastra.com
+#      volumes:
+#          - ./docker/docker-compose/certbot/conf:/etc/letsencrypt
+#          - ./docker/docker-compose/certbot/www:/var/www/certbot
+#      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+#      networks:
+#          - kanastra
+
+networks:
+  kanastra:
+    name: kanastra
+    driver: bridge
