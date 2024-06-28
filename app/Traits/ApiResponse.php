@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Symfony\Component\HttpFoundation\Response;
 
 trait ApiResponse
 {
@@ -12,9 +13,9 @@ trait ApiResponse
      */
     protected function success(
         string $message,
-        string $messageDev = '',
+        mixed $messageDev = '',
         array|JsonResource $data = [],
-        int $code = 200
+        int $code = Response::HTTP_OK
     ): JsonResponse {
         if ($data instanceof JsonResource) {
             $data = $data->jsonSerialize();
@@ -36,11 +37,11 @@ trait ApiResponse
      */
     protected function error(
         string $message = 'Não foi possivel seguir com a requisição.',
-        string $messageDev = '',
-        int $code = 500
+        mixed $messageDev = '',
+        int $code = Response::HTTP_INTERNAL_SERVER_ERROR
     ): JsonResponse {
-        if ($code === 0 || $code > 500) {
-            $code = 500;
+        if ($code === 0 || $code > Response::HTTP_INTERNAL_SERVER_ERROR) {
+            $code = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
         return response()->json(
