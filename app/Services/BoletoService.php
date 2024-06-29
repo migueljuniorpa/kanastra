@@ -21,7 +21,7 @@ class BoletoService
      */
     public function handle(): void
     {
-//        $this->storeFile();
+        $this->storeFile();
         $this->processBoletos();
     }
 
@@ -45,8 +45,6 @@ class BoletoService
      */
     protected function processBoletos(): bool
     {
-        dd($this->file);
-
         if (!file_exists("{$this->filePath}-checkpoint.txt")) {
             file_put_contents("{$this->filePath}-checkpoint.txt", 0);
         }
@@ -71,16 +69,16 @@ class BoletoService
                 $chunk[$currentLine] = $this->parseData($line);
 
                 if (count($chunk) == $chunkSize) {
-                    GenerateBoleto::handle($chunk, $checkpointFile);
-
                     file_put_contents($checkpointFile, $currentLine);
+
+                    GenerateBoleto::handle($chunk, $checkpointFile);
                 }
             }
 
             if (!empty($chunk)) {
-                GenerateBoleto::handle($chunk, $checkpointFile);
-
                 file_put_contents($checkpointFile, $currentLine);
+
+                GenerateBoleto::handle($chunk, $checkpointFile);
             }
 
             fclose($handle);

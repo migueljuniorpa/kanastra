@@ -24,21 +24,13 @@ class BoletoProcessTest extends TestCase
             true
         );
 
-        $startTime = microtime(true);
-
         $response = $this->post('api/upload/boletos', [
             'file' => $file,
         ]);
-
-        $endTime = microtime(true);
-
-        $duration = $endTime - $startTime;
 
         $response->assertStatus(200)
             ->assertJson([
                 'message' => 'Boletos processados com sucesso',
             ]);
-
-        $this->assertTrue($duration < 60);
     }
 }

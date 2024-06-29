@@ -114,7 +114,7 @@ class BoletoServiceTest extends TestCase
 
         $service = new BoletoService($file);
 
-        file_put_contents(storage_path('app/upload/boletos/fileTest.csv-checkpoint.txt'), 0);
+        file_put_contents(storage_path('app/upload/boletos/fileTest-checkpoint.txt'), 0);
 
         $reflection = new ReflectionClass($service);
         $methodStoreFile = $reflection->getMethod('storeFile');

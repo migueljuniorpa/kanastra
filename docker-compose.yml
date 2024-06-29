@@ -19,23 +19,23 @@ services:
       - kanastra
     command: /bin/bash -c "composer install && php-fpm"
 
-#  db:
-#    image: mysql
-#    container_name: kanastra-db
-#    restart: unless-stopped
-#    ports:
-#      - 3306:3306
-#    environment:
-#      MYSQL_DATABASE: ${DB_DATABASE}
-#      MYSQL_PASSWORD: ${DB_PASSWORD}
-#      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-#      MYSQL_USER: ${DB_USERNAME}
-#      TZ: America/Sao_Paulo
-#    volumes:
-#      - ./docker/docker-compose/mysql:/docker-entrypoint-initdb.d:delegated
-#      - ./docker/docker-compose/mysql:/var/lib/mysql
-#    networks:
-#      - kanastra
+  db:
+    image: mysql
+    container_name: kanastra-db
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      TZ: America/Sao_Paulo
+    volumes:
+      - ./docker/docker-compose/mysql:/docker-entrypoint-initdb.d:delegated
+      - ./docker/docker-compose/mysql:/var/lib/mysql
+    networks:
+      - kanastra
 
   nginx:
     image: nginx:alpine
