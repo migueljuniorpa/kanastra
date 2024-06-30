@@ -33,3 +33,10 @@ Caso precise limpar a fila rode
 
 Para rodar os test
 *     php artisan test
+
+
+Para fazer um upload a API, basta enviar na rota ``http://localhost/api/upload/boleto`` o arquivo desejado
+
+### Curl de exemplo requisição
+curl --location 'http://localhost/api/upload/boleto' \
+--form 'file=@"/C:/Users/migue/Downloads/input.csv"'
