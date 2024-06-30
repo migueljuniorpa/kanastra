@@ -12,6 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('boletos', function (Blueprint $table) {
+//            $table->id();
+
             $table->uuid('debtID')->primary();
 
             $table->string('name');

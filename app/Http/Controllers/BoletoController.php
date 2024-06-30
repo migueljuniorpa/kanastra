@@ -22,6 +22,7 @@ class BoletoController extends Controller
 
             return $this->success('Boletos processados com sucesso');
         } catch (Throwable $throwable) {
+            dd($throwable);
             return $this->error(
                 'Não foi possivel seguir com a requisição.',
                 $throwable->getMessage(),
