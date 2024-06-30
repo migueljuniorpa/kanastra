@@ -53,7 +53,7 @@ class BoletoServiceTest extends TestCase
             ->makePartial();
 
         $service->shouldReceive('storeFile')->once();
-        $service->shouldReceive('processBoletos')->once();
+        $service->shouldReceive('processFile')->once();
 
         $service->handle();
     }
@@ -120,7 +120,7 @@ class BoletoServiceTest extends TestCase
         $methodStoreFile = $reflection->getMethod('storeFile');
         $methodStoreFile->invoke($service);
 
-        $method = $reflection->getMethod('processBoletos');
+        $method = $reflection->getMethod('processFile');
 
         $this->assertTrue($method->invoke($service));
     }

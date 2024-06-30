@@ -24,7 +24,7 @@ class BoletoProcessTest extends TestCase
             true
         );
 
-        $response = $this->post('api/upload/boletos', [
+        $response = $this->post('api/upload/boleto', [
             'file' => $file,
         ]);
 

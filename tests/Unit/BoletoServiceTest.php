@@ -42,7 +42,7 @@ class BoletoServiceTest extends TestCase
         file_put_contents($filePath, $csvContent);
 
         // Call the method directly
-        $this->service->processBoletos($filePath);
+        $this->service->processFile($filePath);
 
         // Assert that the checkpoint file was created
         $this->assertFileExists("{$filePath}-checkpoint.txt");

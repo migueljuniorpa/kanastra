@@ -14,7 +14,7 @@ class BoletoController extends Controller
      * @param ProcessBoletoRequest $request
      * @return JsonResponse
      */
-    public function handleBoletos(ProcessBoletoRequest $request): JsonResponse
+    public function handleFile(ProcessBoletoRequest $request): JsonResponse
     {
         try {
             $boletoService = new BoletoService($request->validated('file'));
